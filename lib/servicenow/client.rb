@@ -23,6 +23,7 @@ module Servicenow
     end
 
 
+    # TODO: filter password
     def logger
       @@logger
     end
@@ -32,7 +33,7 @@ module Servicenow
       url = format('%s/change_request', @snow_table_url)
       query = {
           sysparm_limit: 10,
-          sysparm_query: 'active=true^GOTOu_cr_requester.u_name_idLIKE218947'
+          sysparm_query: "active=true^GOTOu_cr_requester.u_name_idLIKE#{user_id}"
       }
 
       response = send_request(url, query)
@@ -62,7 +63,7 @@ module Servicenow
       url = format('%s/change_request', @snow_table_url)
       query = {
           sysparm_limit: 1,
-          number: 'CHG0210847'
+          number: number
       } 
 
       response = send_request(url, query)
