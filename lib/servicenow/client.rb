@@ -6,29 +6,39 @@ module Servicenow
 
   class Client
 
-    @@logger = nil
-    attr_reader :snow_base_url
+    attr_reader :snow_api_base_url, :snow_table_url
 
+    # Initialization parameters for username, password and URL are normally
+    # set in the module configuration.  They can also be passed here, or
+    # set in the environment.  The precedence is ENV > params > module config
+    #
+    # @param [Hash] params initialization parameters
+    #
+    # @option params [String] :username ServiceNow API username
+    # @option params [String] :password ServiceNow API password
+    # @option params [String] :base_url ServiceNow API URL
+    #
+    # @return [Servicenow::Client] new client
     def initialize(params={})
-      @snow_api_username = ENV.fetch('SNOW_API_USERNAME')
-      @snow_api_password = ENV.fetch('SNOW_API_PASSWORD')
-      @snow_base_url = ENV.fetch('SNOW_API_BASE_URL')
-      @snow_table_url = format('%s/%s', @snow_base_url, 'table')
+      @snow_api_username = ENV.fetch('SNOW_API_USERNAME', params.delete(:username))
+      @snow_api_password = ENV.fetch('SNOW_API_PASSWORD', params.delete(:password))
+      @snow_api_base_url = ENV.fetch('SNOW_API_BASE_URL', params.delete(:url))
 
-      if params[:logger]
-        @@logger = params.delete(:logger)
-      else
-        @@logger = Logger.new(STDOUT)
-      end
+      @snow_api_username ||= Servicenow.configuration.username
+      @snow_api_password ||= Servicenow.configuration.password
+      @snow_api_base_url ||= Servicenow.configuration.base_url
+
+      raise MissingParameterError, 'ServiceNow API Username not set' if @snow_api_username.nil?
+      raise MissingParameterError, 'ServiceNow API Password not set' if @snow_api_password.nil?
+      raise MissingParameterError, 'ServiceNow API Base URL not set' if @snow_api_base_url.nil?
+
+      @snow_table_url = format('%s/%s', @snow_api_base_url, 'table')
     end
+    
 
-
-    # TODO: filter password
-    def logger
-      @@logger
-    end
-
-
+    # @param [String] user_id uses LIKE query to match for substring in u_cr_requester field
+    #
+    # @return [Array<Servicenow::Change>]
     def get_changes_by_user(user_id)
       url = format('%s/change_request', @snow_table_url)
       query = {
@@ -43,6 +53,11 @@ module Servicenow
     end
     
 
+    # @param [String] encodedquery a ServiceNow encoded query
+    # @param [int] limit limit results, default 10
+    # @param [int] page page of results, default 1
+    #
+    # @return [Array<Servicenow::Change>]
     def get_changes_by_query(encodedquery, limit=10, page=1)
       url = format('%s/change_request', @snow_table_url)
       query = {
@@ -52,13 +67,16 @@ module Servicenow
       }
 
       response = send_request(url, query)
-      logger.debug response
-
+      Servicenow.logger.debug response
+      
       obj = JSON.parse response.body
       obj['result'].collect{ |c| Change.new(c) }
     end
 
 
+    # @param [String] number Change number
+    #
+    # @return [Servicenow::Change]
     def get_change(number)
       url = format('%s/change_request', @snow_table_url)
       query = {
@@ -73,7 +91,10 @@ module Servicenow
     end
 
 
-    def submit_change(data={})
+    # @param [Hash] data the data to use for Change creation
+    #
+    # @return [Servicenow::Change]
+    def create_change(data={})
       url = format('%s/change_request', @snow_table_url)
       query = {}
       query.merge(data)
@@ -88,12 +109,16 @@ module Servicenow
     end
 
 
-    private
+    # protected
 
 
     def send_request(url, query, method=:get)
       request = HTTPI::Request.new(url)
-      request.query = query
+      if %i[ patch put ].include? method
+        request.body = query.to_json
+      else
+        request.query = query
+      end
       request.auth.basic(@snow_api_username, @snow_api_password)
       request.headers['Accept'] = 'application/json'
       request.headers['Content-Type'] = 'application/json'
