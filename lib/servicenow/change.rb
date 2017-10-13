@@ -21,28 +21,34 @@ module Servicenow
     end
 
 
+    # @param [Hash] extra options to override default query, or non-standard
+    #                     parameters / columns to send to the Change table
     #
     # @return [Servicenow::Change] the change
-    def start
+    def start(extra={})
       url = format('%s/change_request/%s', client.snow_table_url, sys_id)
 
       query = {
-        state: states['work in progress']
-      }
+        state: states['work in progress'],
+        work_start: Time.zone.now
+      }.merge(extra)
 
       response = client.send_request(url, query, :patch)
       change
     end
 
-    
+
+    # @param [Hash] extra options to override default query, or non-standard
+    #                     parameters / columns to send to the Change table
+    #
     # @return [Servicenow::Change] the change
-    def end_change
+    def end_change(extra={})
       url = format('%s/change_request/%s', client.snow_table_url, sys_id)
 
       query = {
         state: states['work complete'],
-        u_completion_code: completion_codes['success']
-      }
+        work_end: Time.zone.now
+      }.merge(extra)
 
       response = client.send_request(url, query, :patch)
       change
