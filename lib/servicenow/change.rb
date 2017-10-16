@@ -30,7 +30,7 @@ module Servicenow
 
       query = {
         state: states['work in progress'],
-        work_start: Time.zone.now
+        work_start: Time.now.utc
       }.merge(extra)
 
       response = client.send_request(url, query, :patch)
@@ -47,7 +47,7 @@ module Servicenow
 
       query = {
         state: states['work complete'],
-        work_end: Time.zone.now
+        work_end: Time.now.utc
       }.merge(extra)
 
       response = client.send_request(url, query, :patch)
