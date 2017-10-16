@@ -1,3 +1,11 @@
+## 1.1.1
+
+* fixed Time.zone.now call to use Time.now.utc
+
+## 1.1.0
+
+* Add ability to override default parameters in Servicenow::Change methods
+
 ## 1.0.0
 
 ### breaking changes
