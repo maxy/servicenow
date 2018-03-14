@@ -8,7 +8,7 @@ class ServicenowTest < Minitest::Test
   end
 
   def test_default_logger
-    assert Logger === Servicenow.logger
+    assert Servicenow.logger.is_a? Logger
   end
 
   def test_assigned_logger

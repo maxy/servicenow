@@ -2,6 +2,9 @@ require 'ostruct'
 
 module Servicenow
 
+  # This class represents a ServiceNow Change.  A Change is a local
+  # representation of the state of the remote.  For writing operations, the
+  # local is updated, and then a request to update the remote is sent
   class Change < OpenStruct
 
     @_client = nil
@@ -70,9 +73,7 @@ module Servicenow
 
 
     def client
-      if @_client.nil?
-        @_client = Servicenow::Client.new
-      end
+      @_client = Servicenow::Client.new if @_client.nil?
       @_client
     end
 
@@ -83,7 +84,7 @@ module Servicenow
         'work in progress' => 2,
         'work complete' => 11,
         'work incomplete' => 4,
-        'waiting on user' => -5,
+        'waiting on user' => -5
       }
     end
 

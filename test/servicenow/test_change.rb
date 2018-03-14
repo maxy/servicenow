@@ -5,7 +5,7 @@ class ChangeTest < Minitest::Test
 
 
   def setup
-    Servicenow::configure do |config|
+    Servicenow.configure do |config|
       config.username = 'foo'
       config.password = 'foo'
       config.base_url = 'foo'

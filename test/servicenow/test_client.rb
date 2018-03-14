@@ -4,7 +4,7 @@ class ClientTest < Minitest::Test
   include Servicenow
 
   def setup
-    Servicenow::configure do |config|
+    Servicenow.configure do |config|
       config.username = nil
       config.password = nil
       config.base_url = nil
@@ -12,7 +12,7 @@ class ClientTest < Minitest::Test
   end
 
   def valid_client
-    client = Client.new(
+    Client.new(
       username: 'foo',
       password: 'whatevs',
       url: 'thing'

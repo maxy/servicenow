@@ -4,6 +4,7 @@ require 'json'
 
 module Servicenow
 
+  # Client is the client to interact with the ServiceNow REST API
   class Client
 
     attr_reader :snow_api_base_url, :snow_table_url
@@ -42,8 +43,8 @@ module Servicenow
     def get_changes_by_user(user_id)
       url = format('%s/change_request', @snow_table_url)
       query = {
-          sysparm_limit: 10,
-          sysparm_query: "active=true^GOTOu_cr_requester.u_name_idLIKE#{user_id}"
+        sysparm_limit: 10,
+        sysparm_query: "active=true^GOTOu_cr_requester.u_name_idLIKE#{user_id}"
       }
 
       response = send_request(url, query)
@@ -61,9 +62,9 @@ module Servicenow
     def get_changes_by_query(encodedquery, limit=10, page=1)
       url = format('%s/change_request', @snow_table_url)
       query = {
-          sysparm_limit: limit,
-          sysparm_page: page,
-          sysparm_query: encodedquery
+        sysparm_limit: limit,
+        sysparm_page: page,
+        sysparm_query: encodedquery
       }
 
       response = send_request(url, query)
@@ -80,8 +81,8 @@ module Servicenow
     def get_change(number)
       url = format('%s/change_request', @snow_table_url)
       query = {
-          sysparm_limit: 1,
-          number: number
+        sysparm_limit: 1,
+        number: number
       } 
 
       response = send_request(url, query)
