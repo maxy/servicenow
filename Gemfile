@@ -4,9 +4,6 @@ git_source(:github){ |repo_name| "https://github.com/#{repo_name}" }
 
 gemspec
 
-gem 'httpi'
-gem 'json'
-
 group :development, :test do
   gem 'guard'
   gem 'guard-bundler'
