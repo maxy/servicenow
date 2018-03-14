@@ -1,5 +1,4 @@
-# coding: utf-8
-lib = File.expand_path('../lib', __FILE__)
+lib = File.expand_path('lib', __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 require 'base64'
@@ -11,8 +10,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ['rubyisbeautiful']
   spec.email         = ['YmNwdGF5bG9yQGdtYWlsLmNvbQ==\n'].collect{ |foo| Base64.decode64(foo) }
 
-  spec.summary       = %q{Simple WIP REST API client for ServiceNow}
-  spec.description   = %q{This REST API client for ServiceNow is a work in progress}
+  spec.summary       = 'Simple WIP REST API client for ServiceNow'
+  spec.description   = 'This REST API client for ServiceNow is a work in progress'
   spec.homepage      = 'https://github.com/rubyisbeautiful/servicenow'
   spec.license       = 'MIT'
 
@@ -25,7 +24,7 @@ Gem::Specification.new do |spec|
       'public gem pushes.'
   end
 
-  spec.files         = `git ls-files -z`.split("\x0").reject do |f|
+  spec.files = `git ls-files -z`.split("\x0").reject do |f|
     f.match(%r{^(test|spec|features)/})
   end
   spec.bindir        = 'exe'

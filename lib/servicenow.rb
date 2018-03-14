@@ -2,6 +2,9 @@ require 'servicenow/version'
 require 'servicenow/client'
 require 'servicenow/change'
 
+# This module is the base for the ServiceNow gem.  It's primary
+# interface consists of the 'configure', 'configuration'
+# and 'logger' methods
 module Servicenow
 
   @logger = nil
@@ -20,18 +23,14 @@ module Servicenow
   #
   # @yieldparam config [Servicenow::Configuration]
   def self.configure(&block)
-    if @configuration.nil?
-      @configuration = OpenStruct.new({})
-    end
+    @configuration = OpenStruct.new({}) if @configuration.nil?
     yield @configuration
   end
 
 
   # @return [Servicenow::Configuration]
   def self.configuration
-    if @configuration.nil?
-      @configuration = OpenStruct.new({})
-    end
+    @configuration = OpenStruct.new({}) if @configuration.nil?
     @configuration
   end
 
@@ -48,9 +47,7 @@ module Servicenow
   #
   # @return [Logger] the module logger
   def self.logger
-    if @logger.nil?
-      @logger = Logger.new(STDOUT)
-    end
+    @logger = Logger.new(STDOUT) if @logger.nil?
     @logger
   end
 

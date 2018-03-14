@@ -1,3 +1,9 @@
+## 1.1.3
+
+* @maxy removed unused variable assignments
+* fixed readme and code climate integration
+* fixed additional rubocop offenses
+
 ## 1.1.2
 
 * fixed Rake test invocation, thanks @maxy
