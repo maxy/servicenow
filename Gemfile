@@ -14,5 +14,6 @@ group :development, :test do
   gem 'minitest'
   gem 'minitest-rg'
   gem 'rake'
+  gem 'rubocop'
   gem 'yard'
 end

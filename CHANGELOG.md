@@ -1,3 +1,9 @@
+## 1.1.2
+
+* fixed Rake test invocation, thanks @maxy
+* test integration turned on and pass
+* rubocop added and some simple offenses fixed
+
 ## 1.1.1
 
 * fixed Time.zone.now call to use Time.now.utc
