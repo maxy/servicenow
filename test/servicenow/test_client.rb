@@ -3,53 +3,64 @@ require 'test_helper'
 class ClientTest < Minitest::Test
   include Servicenow
 
+  def setup
+    Servicenow::configure do |config|
+      config.username = nil
+      config.password = nil
+      config.base_url = nil
+    end
+  end
+
   def valid_client
     client = Client.new(
-          username: 'foo',
-          password: 'whatevs',
-          url: 'thing'
-      )
+      username: 'foo',
+      password: 'whatevs',
+      url: 'thing'
+    )
   end
 
   def test_that_it_requires_username
-    assert_raises(MissingParameterError){
+    assert_raises(MissingParameterError) {
       Client.new(
         password: 'foo',
-        url: 'whatevs')
+        url: 'whatevs'
+      )
     }
   end
 
   def test_that_it_requires_password
-    assert_raises(MissingParameterError){
+    assert_raises(MissingParameterError) {
       Client.new(
         username: 'foo',
-        url: 'whatevs')
+        url: 'whatevs'
+      )
     }
   end
 
   def test_that_it_requires_url
-    assert_raises(MissingParameterError){
+    assert_raises(MissingParameterError) {
       Client.new(
         username: 'foo',
-        password: 'whatevs')
+        password: 'whatevs'
+      )
     }
   end
 
   def test_valid_with_required_params
     Client.new(
-        username: 'foo',
-        password: 'whatevs',
-        url: 'whatevs'
+      username: 'foo',
+      password: 'whatevs',
+      url: 'whatevs'
     )
   end
 
   def test_env_override_username
     ENV.stub :fetch, 'not_foo' do
       client = Client.new(
-            username: 'foo',
-            password: 'whatevs',
-            url: 'thing'
-        )
+        username: 'foo',
+        password: 'whatevs',
+        url: 'thing'
+      )
       assert client.instance_variable_get('@snow_api_username') == 'not_foo'
     end
   end
@@ -57,10 +68,10 @@ class ClientTest < Minitest::Test
   def test_env_override_password
     ENV.stub :fetch, 'not_whatevs' do
       client = Client.new(
-            username: 'foo',
-            password: 'whatevs',
-            url: 'thing'
-        )
+        username: 'foo',
+        password: 'whatevs',
+        url: 'thing'
+      )
       assert client.instance_variable_get('@snow_api_password') == 'not_whatevs'
     end
   end
@@ -68,10 +79,10 @@ class ClientTest < Minitest::Test
   def test_env_override_url
     ENV.stub :fetch, 'not_thing' do
       client = Client.new(
-            username: 'foo',
-            password: 'whatevs',
-            url: 'thing'
-        )
+        username: 'foo',
+        password: 'whatevs',
+        url: 'thing'
+      )
       assert client.instance_variable_get('@snow_api_base_url') == 'not_thing'
     end
   end

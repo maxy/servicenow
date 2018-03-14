@@ -1,5 +1,4 @@
-# Servicenow
-
+# servicenow [![Build Status](https://travis-ci.org/rubyisbeautiful/servicenow.png)](https://travis-ci.org/rubyisbeautiful/servicenow)[![Code Climate](ht    tps://codeclimate.com/github/rubyisbeautiful/servicenow.png)](https://codeclimate.com/github/rubyisbeautiful/servicenow)
 This is a very simple, WIP REST API Client for ServiceNow.
 
 
