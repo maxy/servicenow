@@ -16,7 +16,7 @@ module Servicenow
         work_notes: notes
       }
 
-      response = client.send_request(url, query, :patch)
+      client.send_request(url, query, :patch)
       change
     end
 
@@ -33,7 +33,7 @@ module Servicenow
         work_start: Time.now.utc
       }.merge(extra)
 
-      response = client.send_request(url, query, :patch)
+      client.send_request(url, query, :patch)
       change
     end
 
@@ -50,7 +50,7 @@ module Servicenow
         work_end: Time.now.utc
       }.merge(extra)
 
-      response = client.send_request(url, query, :patch)
+      client.send_request(url, query, :patch)
       change
     end
 
