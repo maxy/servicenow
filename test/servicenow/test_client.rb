@@ -106,7 +106,8 @@ class ClientTest < Minitest::Test
     client = valid_client
     mock_response = Minitest::Mock.new
     mock_response.expect :body, '{"result":[{"foo":"bar"}]}'
-    
+    mock_response.expect 'nil?', true
+
     client.stub :send_request, mock_response do
       changes = client.get_changes_by_query('someencodedquery')
 
